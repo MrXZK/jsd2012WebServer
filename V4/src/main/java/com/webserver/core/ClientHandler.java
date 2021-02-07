@@ -19,23 +19,7 @@ public class ClientHandler implements Runnable{
     }
     public void run(){
         try{
-            //1解析请求
-            InputStream in = socket.getInputStream();  //
-            //测试读取客户端发送过来的请求内容
-            int d;                                           //   高八位   低八位
-            char cur = ' '; //本次读取到的字符
-            char pre = ' '; //上次读取到的字符
-            StringBuilder builder = new StringBuilder(); //保存读取到的所有的字符
-            while((d=in.read())!=-1){  //读取的字节会放到低八位上去 00000000_01010100
-                char c=(char)d;//本次读取到的字符
-                //如果上次读取到的是回车符，本次是换行符则停止读取
-                if(pre==13 && cur== 10){
-                    break;    //退出循环
-                }
-                builder.append(c);//将本次读取到的字符传给builder
-                pre = cur;    //读取完后将本次读取到的字符赋给上次读取的
-            }
-            String line =builder.toString().trim();
+            String line=readLine();
             System.out.print("请求行："+line);
             String method;//请求方式
             String uri;   //抽象路径
@@ -50,6 +34,17 @@ public class ClientHandler implements Runnable{
             System.out.println("method:"+method);  //method；GET
             System.out.println("uri:"+uri);      //uri:/index.html
             System.out.println("protocol:"+protocol); //protocol:HTTP/1.1
+
+            //读取所有的消息头
+            while (true) {
+                line = readLine();
+                //读取消息头时，如果只读取到了回车加换行符机应当停止读取
+                //isEmptuy() 判断字符串内容是不是空字符串
+                if(line.isEmpty()){//readLine单独读取CRLF返回值应当是空字符串
+                    break;
+                }
+                System.out.println("消息头："+line);
+            }
 
 
             //2处理请求
@@ -66,5 +61,27 @@ public class ClientHandler implements Runnable{
                 e.printStackTrace();
             }
         }
+    }
+    //读一行字符串的方法  用来复用
+    private String readLine() throws IOException {
+        /*
+             当socket对象相同时，无论调用多少次getInputStream方法，获取回来的输入流
+             总是同一个流，输出流也是一样
+         */
+        InputStream in = socket.getInputStream();
+        int d;
+        char cur = ' '; //本次读取到的字符
+        char pre = ' '; //上次读取到的字符
+        StringBuilder builder = new StringBuilder(); //保存读取到的所有的字符
+        while((d=in.read())!=-1){  //读取的字节会放到低八位上去 00000000_01010100
+            char c=(char)d;//本次读取到的字符               //   高八位   低八位
+            //如果上次读取到的是回车符，本次是换行符则停止读取
+            if(pre==13 && cur== 10){
+                break;    //退出循环
+            }
+            builder.append(c);//将本次读取到的字符传给builder
+            pre = cur;    //读取完后将本次读取到的字符赋给上次读取的
+        }
+        return builder.toString().trim();
     }
 }

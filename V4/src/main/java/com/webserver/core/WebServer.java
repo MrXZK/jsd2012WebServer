@@ -18,7 +18,7 @@ public class WebServer {
     private ServerSocket serverSocket;
     public WebServer(){
         try {
-            //http://localhost:8088/index.heml HTTP/1.1   本地端口
+            //http://localhost:8088/index.html HTTP/1.1   本地端口
             System.out.println("正在启动服务端...");
             serverSocket = new ServerSocket(8088);
             System.out.println("服务器启动完毕");
@@ -44,4 +44,6 @@ public class WebServer {
         WebServer server =new WebServer();
         server.start();
     }
+
+
 }
