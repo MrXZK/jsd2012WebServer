@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户注册</title>
+</head>
+<body>
+   <center>
+    <h1>欢迎注册</h1>
+    <form action="./regUsre" method="get">
+    <!-- 表单：form 把text内用户输入的内容包含进去，最后提交给服务端
+    form上有两个重要的属性
+    1：action，用来指明表单提交的路径，后面会根据这个路径配合服务器进行处理
+    2：method,有两个值可用：GET,POST.指的是表单提交的方式
+             GET:用户在表单输入的信息会被连接到URL 然后在URL中进行提交
+             POST:数据会被包含在请求的消息正文中被提交.通常表单中含有用户隐私信息(如密码)
+                          或者表单中含有用户上传的附件时要使用POST形式提交.
+                     method属性不指定时,默认为GET形式提交.
+    -->
+        <!--
+            点击提交按钮后,浏览器地址栏请求的路径如下:
+            http://localhost:63342/Webserver/webapps/myweb/regUsre?username=asdads&password=456789&repassword=456789
+            URL地址中？是用来将地址进行分割的，前面的是请求部分，后面的是参数部分
+            上述地址中？左侧内容是由form表单中action指定的路径为准的
+
+         -->
+    <table>
+    <tr>
+        <td>用户名：</td>
+        <!-- 表单中-->
+        <td><input name="username" type="text"></td>
+    </tr>
+    <tr>
+        <td>密码：</td>
+        <td><input name="password" type="password"></td>
+    </tr>
+    <tr>
+        <td>确认密码：</td>
+        <td><input name="repassword" type="password"></td>
+    </tr>
+    </table>
+       <!--submit是提交按钮，点击按钮会将包含它的form -->
+    <td><input type="submit" value="注册"></td>
+    </form>
+   </center>
+</body>
+</html>
